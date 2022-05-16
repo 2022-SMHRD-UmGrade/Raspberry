@@ -62,12 +62,9 @@ class Nfc522(object):
             if status == MIFAREReader.MI_OK:
                 
           
-                print "Back RFID 감지"
+                print "Back RFID"
                 # Print UID
-                print "Card read UID: "+str(uid[0])+","+str(uid[1])+","+str(uid[2])+","+str(uid[3])
-                uid1 = str(uid[0])+str(uid[1])+str(uid[2])+str(uid[3])
-                url3= "http://172.30.1.41:8081/myapp/backRfid?uid="+uid1+"&umbbox_seq=3"
-                requests.get(url3)
+                
                 
                 
 
@@ -90,6 +87,25 @@ class Nfc522(object):
                     MIFAREReader.MFRC522_StopCrypto1()
                 else:
                     print "Authentication error"
+                
+                print "Card read UID: "+str(uid[0])+","+str(uid[1])+","+str(uid[2])+","+str(uid[3])
+                uid1 = str(uid[0])+str(uid[1])+str(uid[2])+str(uid[3])
+                url3= "http://172.30.1.41:8081/myapp/backRfid?uid="+uid1+"&umbbox_seq=1"
+                try : 
+                    requests.get(url3)
+                            #연결 시간초과 예외처리
+                except requests.exceptions.Timeout:
+                    pass
+
+                    #SSL 인증서 에러 발생 방지
+                except requests.exceptions.SSLError:
+                    pass
+            
+                    #연결 실패(응답 없음) 예외처리
+                except requests.exceptions.ConnectionError:
+                    pass
+                
+                sleep(0.1)
                 
 
 class CardReader(threading.Thread):
