@@ -4,6 +4,7 @@ buzzer=21
 lock = 26
 fan = 19
 pins = (13,6,5) # R=13, G=6, B=5
+//GPIO.cleanup()
 
 def lock_OFF() :
     GPIO.setmode(GPIO.BCM)
