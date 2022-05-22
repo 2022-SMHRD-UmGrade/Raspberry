@@ -90,7 +90,7 @@ class Nfc522(object):
                 uid1 = str(uid[0])+str(uid[1])+str(uid[2])+str(uid[3])
                 url3= "http://172.30.1.41:8081/myapp/frontRfid?uid="+uid1+"&umbbox_seq=1"
                 try : 
-                    requests.get(url3)
+                    requests.get(url3, timeout=3)
                             #연결 시간초과 예외처리
                 except requests.exceptions.Timeout:
                     pass
