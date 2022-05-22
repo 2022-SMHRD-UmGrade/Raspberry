@@ -5,8 +5,8 @@
 Class in Python 2.7 that executes a Thread for reading RFID tags.
 
 """
-import time
 import requests
+import time
 import threading
 import signal
 import RPi.GPIO as GPIO
@@ -47,7 +47,7 @@ class Nfc522(object):
         MIFAREReader = MFRC522(self.RST2, self.SPI_DEV1)
 
         while continue_reading:
-
+            
             # Scan for cards    
             (status,TagType) = MIFAREReader.MFRC522_Request(MIFAREReader.PICC_REQIDL)
 
@@ -57,15 +57,13 @@ class Nfc522(object):
             
             # Get the UID of the card
             (status,uid) = MIFAREReader.MFRC522_Anticoll()
-
+        
             # If we have the UID, continue
             if status == MIFAREReader.MI_OK:
                 
-          
+               
                 print "Back RFID"
                 # Print UID
-                
-                
                 
 
                 # GPIO.output(24,GPIO.HIGH)   # Code For Turn ON/OFF Buzzer
@@ -87,12 +85,13 @@ class Nfc522(object):
                     MIFAREReader.MFRC522_StopCrypto1()
                 else:
                     print "Authentication error"
-                
+                    
                 print "Card read UID: "+str(uid[0])+","+str(uid[1])+","+str(uid[2])+","+str(uid[3])
                 uid1 = str(uid[0])+str(uid[1])+str(uid[2])+str(uid[3])
                 url3= "http://172.30.1.41:8081/myapp/backRfid?uid="+uid1+"&umbbox_seq=1"
-                try : 
-                    requests.get(url3)
+                
+                try:
+                    requests.get(url3, timeout=3)
                             #연결 시간초과 예외처리
                 except requests.exceptions.Timeout:
                     pass
@@ -105,7 +104,9 @@ class Nfc522(object):
                 except requests.exceptions.ConnectionError:
                     pass
                 
+                
                 sleep(0.1)
+
                 
 
 class CardReader(threading.Thread):
